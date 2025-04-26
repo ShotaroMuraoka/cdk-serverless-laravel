@@ -1,6 +1,6 @@
-# Laravel + Bref サーバーレスデプロイプロジェクト
+# cdk-serverless-laravel
 
-このリポジトリは、Laravelアプリケーションを [Bref](https://bref.sh/) を用いてAWS Lambda上にサーバーレスデプロイするためのコードベースです。AWSリソースの構築・管理には [AWS CDK (TypeScript)](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html) を利用しています。
+このリポジトリは、Laravelアプリケーションを [Bref](https://bref.sh/) を用いてAWS Lambda上にサーバーレスデプロイするためのリポジトリです。AWSリソースの構築・管理には [AWS CDK (TypeScript)](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html) を利用しています。
 
 ## ディレクトリ構成
 
