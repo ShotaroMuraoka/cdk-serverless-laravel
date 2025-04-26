@@ -5,7 +5,7 @@ import * as efs from 'aws-cdk-lib/aws-efs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { packagePhpCode, PhpFpmFunction, } from '@bref.sh/constructs';
+import { packagePhpCode, PhpFpmFunction, ConsoleFunction } from '@bref.sh/constructs';
 import { EfsInitConstruct } from './construct/efs-init-construct';
 
 export class LaravelCdkStack extends cdk.Stack {
@@ -29,7 +29,6 @@ export class LaravelCdkStack extends cdk.Stack {
       performanceMode: efs.PerformanceMode.GENERAL_PURPOSE,
       throughputMode: efs.ThroughputMode.BURSTING,
     });
-
 
     const accessPoint = fileSystem.addAccessPoint('LaravelAccessPoint', {
       path: '/sqlite',
@@ -71,6 +70,28 @@ export class LaravelCdkStack extends cdk.Stack {
         'Integration',
         laravelFn,
       ),
+    });
+
+    new ConsoleFunction(this, 'LaravelArtisanFunction', {
+      handler: 'artisan',
+      code: packagePhpCode('../laravel/', {
+        exclude: [
+          'tests/**',
+          'var/**',
+        ],
+      }),
+      timeout: cdk.Duration.seconds(28),
+      memorySize: 512,
+      vpc,
+      filesystem: lambda.FileSystem.fromEfsAccessPoint(accessPoint, '/mnt/efs'),
+      environment: {
+          APP_ENV: 'production',
+          APP_STORAGE: '/mnt/efs/storage',
+          LOG_CHANNEL: 'stderr',
+          DB_CONNECTION: 'sqlite',
+          DB_DATABASE: '/mnt/efs/sqlite/database.sqlite',
+      },
+      phpVersion: "8.2",
     });
 
     new EfsInitConstruct(this, 'EfsInitConstruct', {
