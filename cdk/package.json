@@ -8,9 +8,13 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "lint": "npx @biomejs/biome lint ./ --write --unsafe",
+    "format": "npx @biomejs/biome format ./ --write",
+    "ci": "npx @biomejs/biome ci"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.9",
     "aws-cdk": "2.152.0",
