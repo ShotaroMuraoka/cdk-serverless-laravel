@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
-import { LaravelCdkStack } from '../lib/laravel-cdk-stack';
+import "source-map-support/register";
+import * as cdk from "aws-cdk-lib";
+import { LaravelCdkStack } from "../lib/laravel-cdk-stack";
 
 const app = new cdk.App();
-new LaravelCdkStack(app, 'LaravelCdkStack', {
+new LaravelCdkStack(app, "LaravelCdkStack", {
   env: {
-    region: 'ap-northeast-1',
+    region: "ap-northeast-1",
   },
 });
