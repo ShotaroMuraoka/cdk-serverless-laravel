@@ -1,8 +1,8 @@
 {
-  "name": "laravel-cdk",
+  "name": "bref-cdk",
   "version": "0.1.0",
   "bin": {
-    "laravel-cdk": "bin/laravel-cdk.js"
+    "bref-cdk": "bin/bref-cdk.js"
   },
   "scripts": {
     "build": "tsc",

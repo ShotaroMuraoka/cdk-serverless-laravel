@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/laravel-cdk.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/bref-cdk.ts",
   "watch": {
     "include": ["**"],
     "exclude": [

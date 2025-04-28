@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
-import { LaravelCdkStack } from "../lib/laravel-cdk-stack";
+import { BrefStack } from "../lib/bref-stack";
 
 const app = new cdk.App();
-new LaravelCdkStack(app, "LaravelCdkStack", {
+new BrefStack(app, "BrefStack", {
   env: {
     region: "ap-northeast-1",
   },
