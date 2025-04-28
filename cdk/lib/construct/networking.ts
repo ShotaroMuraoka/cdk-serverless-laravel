@@ -6,12 +6,13 @@ export interface NetworkingProps {}
 export class Networking extends Construct {
   public readonly vpc: ec2.IVpc;
 
-  constructor(scope: Construct, id: string, props?: NetworkingProps) {
+  constructor(scope: Construct, id: string, props: NetworkingProps) {
     super(scope, id);
 
     this.vpc = new ec2.Vpc(this, "BrefVpc", {
-      maxAzs: 2,
+      maxAzs: 1,
       natGateways: 0,
+      restrictDefaultSecurityGroup: true,
       subnetConfiguration: [
         {
           name: "BrefPrivate",

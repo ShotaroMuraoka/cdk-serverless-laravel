@@ -5,6 +5,7 @@ import * as efs from "aws-cdk-lib/aws-efs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { packagePhpCode } from "@bref.sh/constructs";
 import { ConsoleFunction } from "@bref.sh/constructs";
+
 export interface ArtisanProps {
   vpc: ec2.IVpc;
   accessPoint: efs.IAccessPoint;
@@ -15,6 +16,7 @@ export class Artisan extends Construct {
     super(scope, id);
 
     new ConsoleFunction(this, "BrefConsoleFunction", {
+      functionName: "ConsoleFunction",
       handler: "artisan",
       code: packagePhpCode("../laravel/", {
         exclude: ["tests/**", "var/**"],

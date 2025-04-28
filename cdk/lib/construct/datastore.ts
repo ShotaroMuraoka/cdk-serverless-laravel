@@ -19,6 +19,7 @@ export class Datastore extends Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       performanceMode: efs.PerformanceMode.GENERAL_PURPOSE,
       throughputMode: efs.ThroughputMode.BURSTING,
+      oneZone: true,
     });
 
     this.accessPoint = this.fileSystem.addAccessPoint("BrefAccessPoint", {

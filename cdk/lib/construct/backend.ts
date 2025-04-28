@@ -18,6 +18,7 @@ export class Backend extends Construct {
   constructor(scope: Construct, id: string, props: BackendProps) {
     super(scope, id);
     this.backendFn = new PhpFpmFunction(this, "BrefApiFunction", {
+      functionName: "ApiFunction",
       handler: "public/index.php",
       code: packagePhpCode("../laravel/", {
         exclude: ["tests/**", "var/**"],
