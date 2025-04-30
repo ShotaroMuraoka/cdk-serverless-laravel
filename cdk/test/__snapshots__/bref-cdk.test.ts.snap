@@ -1,0 +1,903 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Bref Stack Tests Snapshot Tests 1`] = `
+{
+  "Outputs": {
+    "ApiUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "BrefBackendBrefHttpApiD9EBE5C3",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "BrefBackendBrefApiFunctionE0F26466": {
+      "DependsOn": [
+        "BrefBackendBrefApiFunctionServiceRoleDefaultPolicyEA4919E9",
+        "BrefBackendBrefApiFunctionServiceRoleAEB79DB2",
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefDatastoreBrefEfsEfsSecurityGroupfromBrefStackBrefBackendBrefApiFunctionSecurityGroupF059660B2049CB4B211F",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "2e39f76b9ff283fae9db02a212f77f89b8a8c53b8acb9f6b7e256086c0e96d7c.zip",
+        },
+        "Description": "HTTP application",
+        "Environment": {
+          "Variables": {
+            "APP_ENV": "production",
+            "DB_CONNECTION": "sqlite",
+            "DB_DATABASE": "/mnt/efs/database.sqlite",
+            "LOG_CHANNEL": "stderr",
+          },
+        },
+        "FileSystemConfigs": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":elasticfilesystem:ap-northeast-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":access-point/",
+                  {
+                    "Ref": "BrefDatastoreBrefEfsBrefAccessPoint4FF9D55E",
+                  },
+                ],
+              ],
+            },
+            "LocalMountPath": "/mnt/efs",
+          },
+        ],
+        "FunctionName": "ApiFunction",
+        "Handler": "public/index.php",
+        "Layers": [
+          "arn:aws:lambda:ap-northeast-1:534081306603:layer:php-84-fpm:21",
+        ],
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "BrefBackendBrefApiFunctionServiceRoleAEB79DB2",
+            "Arn",
+          ],
+        },
+        "Runtime": "provided.al2",
+        "Timeout": 28,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "BrefBackendBrefApiFunctionSecurityGroupA5EF8C58",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": [
+            {
+              "Ref": "BrefNetworkingBrefVpcBrefPrivateSubnet1Subnet7CA35EC3",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BrefBackendBrefApiFunctionSecurityGroupA5EF8C58": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "GroupDescription": "Automatic security group for Lambda Function BrefStackBrefBackendBrefApiFunctionC3061834",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "BrefNetworkingBrefVpc6C2942A6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "BrefBackendBrefApiFunctionServiceRoleAEB79DB2": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BrefBackendBrefApiFunctionServiceRoleDefaultPolicyEA4919E9": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "elasticfilesystem:ClientMount",
+              "Condition": {
+                "StringEquals": {
+                  "elasticfilesystem:AccessPointArn": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":elasticfilesystem:ap-northeast-1:",
+                        {
+                          "Ref": "AWS::AccountId",
+                        },
+                        ":access-point/",
+                        {
+                          "Ref": "BrefDatastoreBrefEfsBrefAccessPoint4FF9D55E",
+                        },
+                      ],
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "elasticfilesystem:ClientWrite",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":elasticfilesystem:ap-northeast-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":file-system/",
+                    {
+                      "Ref": "BrefDatastoreBrefEfs2B680CF0",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BrefBackendBrefApiFunctionServiceRoleDefaultPolicyEA4919E9",
+        "Roles": [
+          {
+            "Ref": "BrefBackendBrefApiFunctionServiceRoleAEB79DB2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BrefBackendBrefHttpApiD9EBE5C3": {
+      "Properties": {
+        "Name": "BrefHttpApi",
+        "ProtocolType": "HTTP",
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "BrefBackendBrefHttpApiDefaultRoute05BECE51": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "BrefBackendBrefHttpApiD9EBE5C3",
+        },
+        "AuthorizationType": "NONE",
+        "RouteKey": "$default",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "BrefBackendBrefHttpApiDefaultRouteIntegration6542E37F",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "BrefBackendBrefHttpApiDefaultRouteIntegration6542E37F": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "BrefBackendBrefHttpApiD9EBE5C3",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "BrefBackendBrefApiFunctionE0F26466",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "BrefBackendBrefHttpApiDefaultRouteIntegrationPermission606D8ED5": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BrefBackendBrefApiFunctionE0F26466",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "BrefBackendBrefHttpApiD9EBE5C3",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "BrefBackendBrefHttpApiDefaultStage2A04F2FE": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "BrefBackendBrefHttpApiD9EBE5C3",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "BrefConsoleBrefConsoleFunction6DCD093A": {
+      "DependsOn": [
+        "BrefConsoleBrefConsoleFunctionServiceRoleDefaultPolicyB9E83ADC",
+        "BrefConsoleBrefConsoleFunctionServiceRoleB76D3C16",
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefDatastoreBrefEfsEfsSecurityGroupfromBrefStackBrefBackendBrefApiFunctionSecurityGroupF059660B2049CB4B211F",
+        "BrefDatastoreBrefEfsEfsSecurityGroupfromBrefStackBrefConsoleBrefConsoleFunctionSecurityGroup9C56890F2049020E6711",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "2e39f76b9ff283fae9db02a212f77f89b8a8c53b8acb9f6b7e256086c0e96d7c.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "APP_ENV": "production",
+            "DB_CONNECTION": "sqlite",
+            "DB_DATABASE": "/mnt/efs/database.sqlite",
+            "LOG_CHANNEL": "stderr",
+          },
+        },
+        "FileSystemConfigs": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":elasticfilesystem:ap-northeast-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":access-point/",
+                  {
+                    "Ref": "BrefDatastoreBrefEfsBrefAccessPoint4FF9D55E",
+                  },
+                ],
+              ],
+            },
+            "LocalMountPath": "/mnt/efs",
+          },
+        ],
+        "FunctionName": "ConsoleFunction",
+        "Handler": "artisan",
+        "Layers": [
+          "arn:aws:lambda:ap-northeast-1:534081306603:layer:php-84:21",
+          "arn:aws:lambda:ap-northeast-1:534081306603:layer:console:101",
+        ],
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "BrefConsoleBrefConsoleFunctionServiceRoleB76D3C16",
+            "Arn",
+          ],
+        },
+        "Runtime": "provided.al2",
+        "Timeout": 28,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "BrefConsoleBrefConsoleFunctionSecurityGroup22B453A7",
+                "GroupId",
+              ],
+            },
+          ],
+          "SubnetIds": [
+            {
+              "Ref": "BrefNetworkingBrefVpcBrefPrivateSubnet1Subnet7CA35EC3",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BrefConsoleBrefConsoleFunctionSecurityGroup22B453A7": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "GroupDescription": "Automatic security group for Lambda Function BrefStackBrefConsoleBrefConsoleFunction85DA9296",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "BrefNetworkingBrefVpc6C2942A6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "BrefConsoleBrefConsoleFunctionServiceRoleB76D3C16": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BrefConsoleBrefConsoleFunctionServiceRoleDefaultPolicyB9E83ADC": {
+      "DependsOn": [
+        "BrefDatastoreBrefEfsEfsMountTarget161F76EAA",
+        "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B",
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "elasticfilesystem:ClientMount",
+              "Condition": {
+                "StringEquals": {
+                  "elasticfilesystem:AccessPointArn": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":elasticfilesystem:ap-northeast-1:",
+                        {
+                          "Ref": "AWS::AccountId",
+                        },
+                        ":access-point/",
+                        {
+                          "Ref": "BrefDatastoreBrefEfsBrefAccessPoint4FF9D55E",
+                        },
+                      ],
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "elasticfilesystem:ClientWrite",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":elasticfilesystem:ap-northeast-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":file-system/",
+                    {
+                      "Ref": "BrefDatastoreBrefEfs2B680CF0",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BrefConsoleBrefConsoleFunctionServiceRoleDefaultPolicyB9E83ADC",
+        "Roles": [
+          {
+            "Ref": "BrefConsoleBrefConsoleFunctionServiceRoleB76D3C16",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "BrefDatastoreBrefEfs2B680CF0": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AvailabilityZoneName": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "Encrypted": true,
+        "FileSystemTags": [
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefDatastore/BrefEfs",
+          },
+        ],
+        "PerformanceMode": "generalPurpose",
+        "ThroughputMode": "bursting",
+      },
+      "Type": "AWS::EFS::FileSystem",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "BrefDatastoreBrefEfsBrefAccessPoint4FF9D55E": {
+      "Properties": {
+        "AccessPointTags": [
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefDatastore/BrefEfs/BrefAccessPoint",
+          },
+        ],
+        "FileSystemId": {
+          "Ref": "BrefDatastoreBrefEfs2B680CF0",
+        },
+        "PosixUser": {
+          "Gid": "1001",
+          "Uid": "1001",
+        },
+        "RootDirectory": {
+          "CreationInfo": {
+            "OwnerGid": "1001",
+            "OwnerUid": "1001",
+            "Permissions": "750",
+          },
+          "Path": "/bref",
+        },
+      },
+      "Type": "AWS::EFS::AccessPoint",
+    },
+    "BrefDatastoreBrefEfsEfsMountTarget161F76EAA": {
+      "Properties": {
+        "FileSystemId": {
+          "Ref": "BrefDatastoreBrefEfs2B680CF0",
+        },
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "BrefDatastoreBrefEfsEfsSecurityGroupE6B60F4B",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": {
+          "Ref": "BrefNetworkingBrefVpcBrefPrivateSubnet1Subnet7CA35EC3",
+        },
+      },
+      "Type": "AWS::EFS::MountTarget",
+    },
+    "BrefDatastoreBrefEfsEfsSecurityGroupE6B60F4B": {
+      "Properties": {
+        "GroupDescription": "BrefStack/BrefDatastore/BrefEfs/EfsSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefDatastore/BrefEfs",
+          },
+        ],
+        "VpcId": {
+          "Ref": "BrefNetworkingBrefVpc6C2942A6",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "BrefDatastoreBrefEfsEfsSecurityGroupfromBrefStackBrefBackendBrefApiFunctionSecurityGroupF059660B2049CB4B211F": {
+      "Properties": {
+        "Description": "from BrefStackBrefBackendBrefApiFunctionSecurityGroupF059660B:2049",
+        "FromPort": 2049,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "BrefDatastoreBrefEfsEfsSecurityGroupE6B60F4B",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "BrefBackendBrefApiFunctionSecurityGroupA5EF8C58",
+            "GroupId",
+          ],
+        },
+        "ToPort": 2049,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "BrefDatastoreBrefEfsEfsSecurityGroupfromBrefStackBrefConsoleBrefConsoleFunctionSecurityGroup9C56890F2049020E6711": {
+      "Properties": {
+        "Description": "from BrefStackBrefConsoleBrefConsoleFunctionSecurityGroup9C56890F:2049",
+        "FromPort": 2049,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "BrefDatastoreBrefEfsEfsSecurityGroupE6B60F4B",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "BrefConsoleBrefConsoleFunctionSecurityGroup22B453A7",
+            "GroupId",
+          ],
+        },
+        "ToPort": 2049,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "BrefNetworkingBrefVpc6C2942A6": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefNetworking/BrefVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTable83E1F6FA": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefNetworking/BrefVpc/BrefPrivateSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "BrefNetworkingBrefVpc6C2942A6",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTableAssociation232A391B": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "BrefNetworkingBrefVpcBrefPrivateSubnet1RouteTable83E1F6FA",
+        },
+        "SubnetId": {
+          "Ref": "BrefNetworkingBrefVpcBrefPrivateSubnet1Subnet7CA35EC3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "BrefNetworkingBrefVpcBrefPrivateSubnet1Subnet7CA35EC3": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/16",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "BrefPrivate",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          {
+            "Key": "Name",
+            "Value": "BrefStack/BrefNetworking/BrefVpc/BrefPrivateSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "BrefNetworkingBrefVpc6C2942A6",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "BrefNetworkingBrefVpcRestrictDefaultSecurityGroupCustomResource976078A6": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Account": {
+          "Ref": "AWS::AccountId",
+        },
+        "DefaultSecurityGroupId": {
+          "Fn::GetAtt": [
+            "BrefNetworkingBrefVpc6C2942A6",
+            "DefaultSecurityGroup",
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::VpcRestrictDefaultSG",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+      "DependsOn": [
+        "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-ap-northeast-1",
+          },
+          "S3Key": "7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip",
+        },
+        "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group",
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:AuthorizeSecurityGroupIngress",
+                    "ec2:AuthorizeSecurityGroupEgress",
+                    "ec2:RevokeSecurityGroupIngress",
+                    "ec2:RevokeSecurityGroupEgress",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition",
+                          },
+                          ":ec2:ap-northeast-1:",
+                          {
+                            "Ref": "AWS::AccountId",
+                          },
+                          ":security-group/",
+                          {
+                            "Fn::GetAtt": [
+                              "BrefNetworkingBrefVpc6C2942A6",
+                              "DefaultSecurityGroup",
+                            ],
+                          },
+                        ],
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

@@ -6,7 +6,7 @@ import { Backend } from "./construct/backend";
 import { Artisan } from "./construct/artisan";
 
 export class BrefStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
     const networking = new Networking(this, "BrefNetworking", {});
